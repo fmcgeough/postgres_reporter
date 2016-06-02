@@ -9,7 +9,7 @@ if ARGV.empty? || ARGV.size != 3
 else
   options = YAML.load(File.read(ARGV[0]))
   rdr = PostgresReporter::PostgresReader.new(options['postgres_reporter'])
-  query = File.open(ARGV[1], 'r') { |&read| }
+  query = File.open(ARGV[1], 'r', &:read)
   File.open(ARGV[2], 'w') do |file|
     rdr.query(query, file)
   end
