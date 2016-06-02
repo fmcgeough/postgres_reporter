@@ -10,7 +10,7 @@ to ensure the version is correct for install otherwise it'll get "file not
 found".
 
 ```
-git clone git@github.com:postgres_reporter.git
+git clone git@github.com/fmcgeough/postgres_reporter.git
 cd postgres_reporter
 gem build postgres_reporter.gemspec
 gem install --local postgres_reporter-1.0.0.gem --verbose
