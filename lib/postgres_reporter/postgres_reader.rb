@@ -15,6 +15,7 @@ module PostgresReporter
     # won't work with the COPY command we build.
     def query(sql, file)
       return if sql.nil? || file.nil?
+      sql.strip!
       get_copy_data(sql.chomp(';'), file)
     end
 
