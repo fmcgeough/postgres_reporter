@@ -11,8 +11,11 @@ module PostgresReporter
     end
 
     # SELECT data from database and dumps it as CSV into caller's file
+    # remove trailing semicolon if SQL file had one. Otherwise it
+    # won't work with the COPY command we build.
     def query(sql, file)
-      get_copy_data(sql, file)
+      return if sql.nil? || file.nil?
+      get_copy_data(sql.chomp(';'), file)
     end
 
     private
