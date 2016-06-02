@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+require 'postgres_reporter'
+require 'yaml'
+
+if ARGV.empty? || ARGV.size != 3
+  puts 'Usage: postgres_reporter credentials.yml sql_to_run.sql outputfile.csv'
+else
+  options = YAML.load(File.read(ARGV[0]))
+  rdr = PostgresReporter::PostgresReader.new(options['postgres_reporter'])
+  query = File.open(ARGV[1], 'r') { |&read| }
+  File.open(ARGV[2], 'w') do |file|
+    rdr.query(query, file)
+  end
+end
