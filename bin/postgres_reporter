@@ -3,14 +3,23 @@
 require 'bundler/setup'
 require 'postgres_reporter'
 require 'yaml'
+require 'logger'
+
+logger = Logger.new(STDOUT)
+logger.progname = 'POSTGRES_REPORTER'
+logger.level = Logger::INFO
 
 if ARGV.empty? || ARGV.size != 3
-  puts 'Usage: postgres_reporter credentials.yml sql_to_run.sql outputfile.csv'
+  logger.info("Usage: \
+  postgres_reporter credentials.yml sql_to_run.sql outputfile.csv")
 else
-  options = YAML.load(File.read(ARGV[0]))
-  rdr = PostgresReporter::PostgresReader.new(options['postgres_reporter'])
-  query = File.open(ARGV[1], 'r', &:read)
-  File.open(ARGV[2], 'w') do |file|
-    rdr.query(query, file)
+  begin
+    pg = PostgresReporter::PostgresReporter.new(ARGV[0], ARGV[1], ARGV[2])
+    pg.query
+  rescue => e
+    logger.error(e.message.strip!)
+    logger.error(e.backtrace.inspect)
+    exit false
   end
+  exit true
 end
